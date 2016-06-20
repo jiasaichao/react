@@ -20,6 +20,7 @@ class App extends React.Component<any, any> {
 let mapStateToProps = (state) => {
     return {
         state
+        
     }
 }
 
