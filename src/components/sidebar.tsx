@@ -3,8 +3,7 @@ import {Common, Global,Colors} from "../utils/common";
 import {Button} from "./button";
 interface IPSidebar extends React.Props<Sidebar> {
     active?:number,
-    items?:any[],
-    opens?:number[]
+    items?:any[]
 }
 interface ISSidebar {
     /**选中项key*/
@@ -22,14 +21,14 @@ class Sidebar extends React.Component<IPSidebar, ISSidebar>{
         //let active=this.props.active||this.props.items[0].id;
         let s = this.props.items.map((value,index) => {
             let active=false;
-            let open=this.props.opens.indexOf(value.id)>-1;
+
             let si = (value['items'] as any[]).map((items,itemsIndex) => {
                 if (items.id===this.props.active) {
                     active=true;
                 }
                 return <SidebarItem lable={items.title} active={items.id===this.props.active}  key={items.id} href={items.href}></SidebarItem>;
             });
-            return <SidebarItems lable={value.title} active={active} open={open} key={value.id}>{si}</SidebarItems>
+            return <SidebarItems lable={value.title} active={active} open={value.open} key={value.id}>{si}</SidebarItems>
         });
         // var children = this.props.children;
         // let childrenElements = React.Children.map(children, function (el: React.ReactElement<IPSidebarItems>, index) {
@@ -53,6 +52,7 @@ interface IPSidebarItems extends React.Props<SidebarItems> {
     open?:boolean;
     /**是否是选中项，默认false */
     active?:boolean;
+    handleOnClick:()=>{};
 }
 interface ISSidebarItems {
     /**是否展开*/
@@ -118,7 +118,7 @@ class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
             i = <ul style={styles.children.o} ref="aaaac">{childrenElements}</ul>;
         }
         return <li style={{ borderBottom:"1px solid #3D4957" }}>
-                    <Button onClick={this.handleOnClick.bind(this)} state={this.state.active?2:1} color={Global.colors.sidebar} style={styles.showButton.o}>
+                    <Button onClick={this.props.handleOnClick.bind(this)} state={this.state.active?2:1} color={Global.colors.sidebar} style={styles.showButton.o}>
                     {this.props.lable}
                     <span style={{ fontSize: "14px", color: "#fff", marginRight: 20 }} className={chevronName}></span>
                     </Button>
@@ -129,12 +129,12 @@ class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
         this.height = (this.refs["aaaac"] as Element).clientHeight;
         this.setState({ open: this.state.open });
     }
-    handleOnClick() {
-        this.setState({ open: !this.state.open });
-    }
-    handleActive=()=>{
-        this.setState({active:true});
-    }
+    // handleOnClick() {
+    //     this.setState({ open: !this.state.open });
+    // }
+    // handleActive=()=>{
+    //     this.setState({active:true});
+    // }
 }
 
 interface ISidebarItem extends React.Props<SidebarItem> {

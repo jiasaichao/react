@@ -1,22 +1,11 @@
 ﻿/// <reference path="../typings/browser.d.ts" />
 import {createStore} from "redux"
-let store = createStore(
-    (state, action) => {
-        switch (action.type) {
-            case 'INCR':
-                return { counter: state.counter + action.by };
-            default:
-                return state;
-        }
-    },
-    {
-        sidebar: {
-            active:0,
-            opens:[],
+var defaultState = { sidebar: {
+            active:1,
             items:
             [
             {
-                id: 1, title: '用户界面功能',
+                id: 1, title: '用户界面功能',open:true,
                 items: [
                     {
                         id: 11, title: '按钮',href:''
@@ -58,6 +47,15 @@ let store = createStore(
                 ]
             }
         ]
-    }
-    });
+    }};
+let store = createStore(
+    (state, action) => {
+        switch (action.type) {
+            case 'INCR':
+                return { counter: state.counter + action.by };
+            default:
+                return state;
+        }
+    },
+    defaultState);
 export {store}
