@@ -87,7 +87,7 @@ class Colors {
     static fontHeaderActive = '#fff';
     /**深色1，分页选中，和字体都是这个色*/
     static colorshen1 = '#337AB7';
-    /**鼠标移到分页按钮上的颜色，也是很多移到上班需要变浅色的颜色*/
+    /**鼠标移到分页按钮上的颜色，也是很多移到上边需要变浅色的颜色*/
     static colorMouse = '#EEEEEE';
     static bgSidebar = Colors.mainBackground;
     static bgSidebarMouse = Colors.bgHeader;
@@ -98,7 +98,8 @@ class Colors {
     static header = new Color_O(Colors.bgHeader, Colors.fontHeader, Colors.bgHeaderMouse
         , Colors.fontHeaderMouse, Colors.bgHeaderActive, Colors.bgHeaderActive);
     static sidebar = new Color_O(Colors.bgSidebar, Colors.fontSidebar, Colors.bgSidebarMouse
-        , Colors.fontSidebarMouse, Colors.bgSidebarActive, Colors.bgSidebarActive);
+        , Colors.fontSidebarMouse, Colors.bgSidebarActive, '#fff');
+    static sidebaritem = new Color_O(Colors.bgSidebar, Colors.fontSidebar, '#3E4B5C', '#fff', '#3E4B5C', '#fff');
     /**提交按钮颜色组*/
     static butonSubmit = new Color_O(Colors.mainActive, Colors.fontHeaderActive, Colors.mainActive_deep1
         , Colors.fontSidebarMouse, Colors.bgSidebarActive, Colors.bgSidebarActive);

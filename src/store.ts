@@ -10,7 +10,11 @@ let store = createStore(
         }
     },
     {
-        sidebar: [
+        sidebar: {
+            active:0,
+            opens:[],
+            items:
+            [
             {
                 id: 1, title: '用户界面功能',
                 items: [
@@ -54,5 +58,6 @@ let store = createStore(
                 ]
             }
         ]
+    }
     });
 export {store}

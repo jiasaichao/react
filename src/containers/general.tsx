@@ -1,5 +1,5 @@
 ﻿/// <reference path="../../typings/browser.d.ts" />
-import {Header, Button, Sidebar, SidebarItem, SidebarItems, NavigationBar, NavigationBarItem, ButtonSubmit, Portlet, Alert} from "../components/index";
+import {Header, Button, Sidebar, NavigationBar, NavigationBarItem, ButtonSubmit, Portlet, Alert} from "../components/index";
 export default React.createClass({
     render: function () {
         return (

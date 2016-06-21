@@ -7508,8 +7508,6 @@
 	exports.NavigationBarItem = navigationbar_1.NavigationBarItem;
 	var sidebar_1 = __webpack_require__(100);
 	exports.Sidebar = sidebar_1.Sidebar;
-	exports.SidebarItem = sidebar_1.SidebarItem;
-	exports.SidebarItems = sidebar_1.SidebarItems;
 	var alert_1 = __webpack_require__(101);
 	exports.Alert = alert_1.Alert;
 	var portlet_1 = __webpack_require__(102);
@@ -7568,7 +7566,6 @@
 	            display: "flex",
 	            alignItems: "center"
 	        });
-	        style.merge(this.props.style);
 	        if (this.props.color) {
 	            switch (this.state.state) {
 	                case CurrentState.Normal:
@@ -7582,17 +7579,22 @@
 	                    break;
 	            }
 	        }
+	        style.merge(this.props.style);
 	        return React.createElement("a", {href: "javascript:;", onClick: click, onMouseOver: this._handleMouseOver.bind(this), onMouseOut: this._handleMouseOut.bind(this), style: style.o}, this.props.children);
 	    };
 	    Button.prototype._handleMouseOver = function () {
-	        this.setState({
-	            state: CurrentState.Mouse
-	        });
+	        if (this.state.state !== CurrentState.Active) {
+	            this.setState({
+	                state: CurrentState.Mouse
+	            });
+	        }
 	    };
 	    Button.prototype._handleMouseOut = function () {
-	        this.setState({
-	            state: CurrentState.Normal
-	        });
+	        if (this.state.state !== CurrentState.Active) {
+	            this.setState({
+	                state: CurrentState.Normal
+	            });
+	        }
 	    };
 	    return Button;
 	}(React.Component));
@@ -7606,7 +7608,6 @@
 	        _super.apply(this, arguments);
 	    }
 	    ButtonSubmit.prototype.render = function () {
-	        console.log('button..............');
 	        return (React.createElement(Button, {color: common_1.Global.colors.butonSubmit, href: this.props.href, onClick: this.props.onClick, style: this.props.style}, this.props.children));
 	    };
 	    return ButtonSubmit;
@@ -7723,7 +7724,7 @@
 	    Colors.fontHeaderActive = '#fff';
 	    /**深色1，分页选中，和字体都是这个色*/
 	    Colors.colorshen1 = '#337AB7';
-	    /**鼠标移到分页按钮上的颜色，也是很多移到上班需要变浅色的颜色*/
+	    /**鼠标移到分页按钮上的颜色，也是很多移到上边需要变浅色的颜色*/
 	    Colors.colorMouse = '#EEEEEE';
 	    Colors.bgSidebar = Colors.mainBackground;
 	    Colors.bgSidebarMouse = Colors.bgHeader;
@@ -7732,7 +7733,8 @@
 	    Colors.fontSidebarMouse = Colors.fontHeader;
 	    Colors.fontSidebarActive = Colors.fontHeaderActive;
 	    Colors.header = new Color_O(Colors.bgHeader, Colors.fontHeader, Colors.bgHeaderMouse, Colors.fontHeaderMouse, Colors.bgHeaderActive, Colors.bgHeaderActive);
-	    Colors.sidebar = new Color_O(Colors.bgSidebar, Colors.fontSidebar, Colors.bgSidebarMouse, Colors.fontSidebarMouse, Colors.bgSidebarActive, Colors.bgSidebarActive);
+	    Colors.sidebar = new Color_O(Colors.bgSidebar, Colors.fontSidebar, Colors.bgSidebarMouse, Colors.fontSidebarMouse, Colors.bgSidebarActive, '#fff');
+	    Colors.sidebaritem = new Color_O(Colors.bgSidebar, Colors.fontSidebar, '#3E4B5C', '#fff', '#3E4B5C', '#fff');
 	    /**提交按钮颜色组*/
 	    Colors.butonSubmit = new Color_O(Colors.mainActive, Colors.fontHeaderActive, Colors.mainActive_deep1, Colors.fontSidebarMouse, Colors.bgSidebarActive, Colors.bgSidebarActive);
 	    /**分页按钮颜色组*/
@@ -8086,14 +8088,21 @@
 	    }
 	    Sidebar.prototype.render = function () {
 	        var self = this;
-	        var children = this.props.children;
-	        var childrenElements = React.Children.map(children, function (el, index) {
-	            if (el.type.name === "SidebarItems") {
-	                var i = React.cloneElement(el, { key: el.key, lable: el.props.lable });
-	                return i;
-	            }
+	        var active = this.props.active || this.props.items[0].id;
+	        var s = this.props.items.map(function (value, index) {
+	            var si = value['items'].map(function (items, itemsIndex) {
+	                return React.createElement(SidebarItem, {lable: items.title, key: items.id, href: items.href});
+	            });
+	            return React.createElement(SidebarItems, {lable: value.title, key: value.id, open: value.id === active, active: value.id === active}, si);
 	        });
-	        return React.createElement("div", {style: { height: "100%", flex: '1', background: common_1.Global.colors.bgSidebar, fontSize: '14px' }}, React.createElement("ul", null, childrenElements));
+	        // var children = this.props.children;
+	        // let childrenElements = React.Children.map(children, function (el: React.ReactElement<IPSidebarItems>, index) {
+	        //     if ((el.type as any).name === "SidebarItems") {
+	        //         let i = React.cloneElement(el, { key: el.key, lable: el.props.lable });
+	        //         return i;
+	        //     }
+	        // });
+	        return React.createElement("div", {style: { height: "100%", flex: '1', background: common_1.Global.colors.bgSidebar, fontSize: '14px' }}, React.createElement("ul", null, s));
 	    };
 	    return Sidebar;
 	}(React.Component));
@@ -8104,7 +8113,7 @@
 	        _super.call(this, props);
 	        /**高度*/
 	        this.height = -1;
-	        this.state = { open: false };
+	        this.state = { open: this.props.open || false };
 	    }
 	    SidebarItems.prototype.render = function () {
 	        var styles = {
@@ -8112,8 +8121,19 @@
 	                transition: "height .3s",
 	                display: "block",
 	                overflow: "hidden"
-	            })
+	            }),
+	            showButton: common_1.Common.prepareStyles({ height: 41, paddingLeft: common_1.Global.padding, justifyContent: "space-between" })
 	        };
+	        if (this.props.active) {
+	        }
+	        else {
+	            if (this.state.open) {
+	                styles.showButton.merge({
+	                    background: common_1.Colors.bgSidebarMouse,
+	                    color: common_1.Colors.fontSidebarMouse
+	                });
+	            }
+	        }
 	        var chevronName;
 	        var self = this;
 	        var children = this.props.children;
@@ -8140,7 +8160,7 @@
 	        if (childrenElements) {
 	            i = React.createElement("ul", {style: styles.children.o, ref: "aaaac"}, childrenElements);
 	        }
-	        return React.createElement("li", {style: { borderBottom: "1px solid #3D4957" }}, React.createElement(button_1.Button, {onClick: this.handleOnClick.bind(this), color: common_1.Global.colors.sidebar, style: { height: 41, paddingLeft: common_1.Global.padding, justifyContent: "space-between" }}, this.props.lable, React.createElement("span", {style: { fontSize: "14px", color: "#fff", marginRight: 20 }, className: chevronName})), i);
+	        return React.createElement("li", {style: { borderBottom: "1px solid #3D4957" }}, React.createElement(button_1.Button, {onClick: this.handleOnClick.bind(this), state: this.props.active ? 2 : 1, color: common_1.Global.colors.sidebar, style: styles.showButton.o}, this.props.lable, React.createElement("span", {style: { fontSize: "14px", color: "#fff", marginRight: 20 }, className: chevronName})), i);
 	    };
 	    SidebarItems.prototype.componentDidMount = function () {
 	        this.height = this.refs["aaaac"].clientHeight;
@@ -8151,18 +8171,18 @@
 	    };
 	    return SidebarItems;
 	}(React.Component));
-	exports.SidebarItems = SidebarItems;
 	var SidebarItem = (function (_super) {
 	    __extends(SidebarItem, _super);
 	    function SidebarItem() {
 	        _super.apply(this, arguments);
 	    }
 	    SidebarItem.prototype.render = function () {
-	        return React.createElement("li", null, React.createElement(button_1.Button, {color: common_1.Global.colors.sidebar, href: this.props.href, style: { height: 31, paddingLeft: 43 }}, this.props.lable));
+	        return React.createElement("li", null, React.createElement(button_1.Button, {color: common_1.Global.colors.sidebaritem, href: this.props.href, style: { height: 31, paddingLeft: 43 }}, this.props.lable));
 	    };
 	    return SidebarItem;
 	}(React.Component));
-	exports.SidebarItem = SidebarItem;
+	// export {SidebarItems}
+	// export {SidebarItem} 
 
 
 /***/ },
@@ -8347,13 +8367,7 @@
 	        _super.apply(this, arguments);
 	    }
 	    MainLayout.prototype.render = function () {
-	        var s = this.props.sidebar.map(function (value) {
-	            var si = value['items'].map(function (items) {
-	                return React.createElement(index_1.SidebarItem, {lable: items.title, key: items.id, href: items.href});
-	            });
-	            return React.createElement(index_1.SidebarItems, {lable: value.title, key: value.id}, si);
-	        });
-	        return (React.createElement("div", {style: { display: 'flex', flexDirection: 'column', minHeight: '100%' }}, React.createElement(index_1.Header, null, React.createElement(index_1.Button, {color: common_1.Global.colors.header, style: { height: "100%", padding: "0 8px" }}, "退出")), React.createElement("div", {style: { display: "flex", flex: '1' }}, React.createElement("div", {style: { width: "235px", display: 'flex', flexDirection: 'column' }}, React.createElement(index_1.Sidebar, null, s)), React.createElement("div", {style: { flex: "1" }}, React.createElement("header", {style: common_1.Global.styles.create(common_1.Global.styles.czjz).o}, React.createElement(index_1.NavigationBar, null, React.createElement(index_1.NavigationBarItem, {lable: "首页"}))), this.props.children))));
+	        return (React.createElement("div", {style: { display: 'flex', flexDirection: 'column', minHeight: '100%' }}, React.createElement(index_1.Header, null, React.createElement(index_1.Button, {color: common_1.Global.colors.header, style: { height: "100%", padding: "0 8px" }}, "退出")), React.createElement("div", {style: { display: "flex", flex: '1' }}, React.createElement("div", {style: { width: "235px", display: 'flex', flexDirection: 'column' }}, React.createElement(index_1.Sidebar, {items: this.props.sidebar})), React.createElement("div", {style: { flex: "1" }}, React.createElement("header", {style: common_1.Global.styles.create(common_1.Global.styles.czjz).o}, React.createElement(index_1.NavigationBar, null, React.createElement(index_1.NavigationBarItem, {lable: "首页"}))), this.props.children))));
 	    };
 	    return MainLayout;
 	}(React.Component));

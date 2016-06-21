@@ -51,7 +51,6 @@ class Button extends React.Component<IButtonProps, IButtonState> {
             display: "flex",
             alignItems:"center"
         });
-        style.merge(this.props.style);
         if (this.props.color){
             switch (this.state.state) {
                 case CurrentState.Normal:
@@ -65,18 +64,24 @@ class Button extends React.Component<IButtonProps, IButtonState> {
                     break;
             }
         }
+        style.merge(this.props.style);
 
         return <a href="javascript:;" onClick={click } onMouseOver={this._handleMouseOver.bind(this) } onMouseOut={this._handleMouseOut.bind(this) }  style={style.o}>{this.props.children}</a>;
     }
     _handleMouseOver() {
-        this.setState({
+        if (this.state.state!==CurrentState.Active) {
+            this.setState({
             state: CurrentState.Mouse
         });
+        }
+        
     }
     _handleMouseOut() {
-        this.setState({
+        if (this.state.state!==CurrentState.Active) {
+            this.setState({
             state: CurrentState.Normal
         });
+        }
     }
 }
 interface IButtonSubmitProps extends React.Props<ButtonSubmit> {
@@ -90,7 +95,6 @@ interface IButtonSubmitProps extends React.Props<ButtonSubmit> {
  */
 class ButtonSubmit extends React.Component<IButtonSubmitProps, {}>{
     render() {
-        console.log('button..............')
         return (
             <Button color={Global.colors.butonSubmit} href={this.props.href} onClick={this.props.onClick } style={this.props.style}>{this.props.children}</Button>  
         );
