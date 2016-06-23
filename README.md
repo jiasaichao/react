@@ -15,7 +15,7 @@
 * typings：typescript的d.ts文件不是使用的typings命令添加的直接复制过来的，用命令的时候老出问题，应该是我家里的网络不好。
 * .gitignore：git忽略文件。
 * tsconfig.json：编译typescript的配置文件。
-* webpack.config.js：webpack配置文件。
+* webpack.config.js：webpack配置文件
 ## 状态维护
 ### 组件自己维护状态：
 一些组件之间不交互，或者很少交互。如果其他组件要改变组件自己维护的状态而不是redux维护的可以通过事件总线的形式交互。
