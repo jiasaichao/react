@@ -2,8 +2,9 @@
 import {Common, Global,Colors} from "../utils/common";
 import {Button} from "./button";
 interface IPSidebar extends React.Props<Sidebar> {
-    active?:number,
-    items?:any[]
+    active?:number;
+    parent?:any[];
+    child?:any[];
 }
 interface ISSidebar {
     /**选中项key*/
@@ -19,10 +20,10 @@ class Sidebar extends React.Component<IPSidebar, ISSidebar>{
     render() {
         let self = this;
         //let active=this.props.active||this.props.items[0].id;
-        let s = this.props.items.map((value,index) => {
+        let s = this.props.parent.map((value,index) => {
             let active=false;
 
-            let si = (value['items'] as any[]).map((items,itemsIndex) => {
+            let si = (this.props.child).map((items,itemsIndex) => {
                 if (items.id===this.props.active) {
                     active=true;
                 }

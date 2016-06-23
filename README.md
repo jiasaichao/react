@@ -16,9 +16,18 @@
 * .gitignore：git忽略文件。
 * tsconfig.json：编译typescript的配置文件。
 * webpack.config.js：webpack配置文件。
-
 ## 状态维护
 ### 组件自己维护状态：
 一些组件之间不交互，或者很少交互。如果其他组件要改变组件自己维护的状态而不是redux维护的可以通过事件总线的形式交互。
 ### redux维护状态，也就是redux提倡的无状态组件：
 一般，内容数据，其他组件经常修改的状态。
+## 插件/库
+### lodash
+资料：[中文api文档](http://lodash.think2011.net/)  
+引用方式：   
+`// 直接引用现代版本 var _ = require('lodash');`    
+`// 或引用某分类下的所有方法 var array = require('lodash/array');`  
+`// 或者引用具体方法 (很适合在 browserify/webpack 中做最小化打包) var chunk = require('lodash/array/chunk');`   
+常用  
+`_.assign({ 'a': 1 }, { 'b': 2 }, { 'c': 3 });// → { 'a': 1, 'b': 2, 'c': 3 }`    
+`_.map([1, 2, 3], function(n) { return n * 3; });// → [3, 6, 9]`
