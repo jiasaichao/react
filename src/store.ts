@@ -48,8 +48,11 @@ var defaultState = {
 let store = createStore(
     (state, action) => {
         switch (action.type) {
-            case 'INCR':
-                return { counter: state.counter + action.by };
+            case 'sidebar-open':
+                let r=_.assign({},state);
+                let prant=(r.sidebar.parent as any[]).filter(x=>x.id==action.id)[0];
+                prant.open==!prant.open;
+                return r;
             default:
                 return state;
         }

@@ -4,9 +4,10 @@ import {Header, Button, Sidebar, NavigationBar, NavigationBarItem} from "../comp
 import { Provider, connect} from 'react-redux';
 interface IMainLayout extends React.Props<MainLayout> {
     sidebar: {
-        active?:number,
-        items?:any[],
-        opens?:number[]
+        active?:number;
+        parent?:any[];
+        child?:any[];
+        open:(id)=>{};
     };
 }
 class MainLayout extends React.Component<IMainLayout, any>{
@@ -34,10 +35,15 @@ class MainLayout extends React.Component<IMainLayout, any>{
         )
     }
 }
-let mapStateToProps = (state):IMainLayout => {
+const mapStateToProps = (state):IMainLayout => {
     return {
         sidebar:state.sidebar
     };
 }
+const mapDispatchToProps = (dispatch) => ({
+    open: (id) => {
+        dispatch({ type: 'sidebar-open',id });
+    }
+});
 
 export default connect(mapStateToProps)(MainLayout);

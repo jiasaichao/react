@@ -5,6 +5,7 @@ interface IPSidebar extends React.Props<Sidebar> {
     active?:number;
     parent?:any[];
     child?:any[];
+    open:(id)=>{};
 }
 interface ISSidebar {
     /**选中项key*/
@@ -22,14 +23,13 @@ class Sidebar extends React.Component<IPSidebar, ISSidebar>{
         //let active=this.props.active||this.props.items[0].id;
         let s = this.props.parent.map((value,index) => {
             let active=false;
-
-            let si = (this.props.child).map((items,itemsIndex) => {
+            let si = _.filter(this.props.child,{pid:value.id}).map((items,itemsIndex) => {
                 if (items.id===this.props.active) {
                     active=true;
                 }
                 return <SidebarItem lable={items.title} active={items.id===this.props.active}  key={items.id} href={items.href}></SidebarItem>;
             });
-            return <SidebarItems lable={value.title} active={active} open={value.open} key={value.id}>{si}</SidebarItems>
+            return <SidebarItems lable={value.title} active={active} open={value.open} key={value.id} handleOnClick={()=>this.props.open(value.id)}>{si}</SidebarItems>
         });
         // var children = this.props.children;
         // let childrenElements = React.Children.map(children, function (el: React.ReactElement<IPSidebarItems>, index) {

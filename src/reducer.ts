@@ -1,3 +1,4 @@
+/// <reference path="../typings/browser.d.ts" />
 import "./utils/public";
 const changeCounter = (state, action) =>{
      var shape = Object.assign({},
