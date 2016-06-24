@@ -5,7 +5,7 @@ interface IPSidebar extends React.Props<Sidebar> {
     active?:number;
     parent?:any[];
     child?:any[];
-    open:(id)=>{};
+    open:(id)=>void;
 }
 interface ISSidebar {
     /**选中项key*/
@@ -53,7 +53,7 @@ interface IPSidebarItems extends React.Props<SidebarItems> {
     open?:boolean;
     /**是否是选中项，默认false */
     active?:boolean;
-    handleOnClick:()=>{};
+    handleOnClick:()=>void;
 }
 interface ISSidebarItems {
     /**是否展开*/
@@ -154,7 +154,7 @@ class SidebarItem extends React.Component<ISidebarItem, {}>{
         }
         return (
             <li>
-                <Button color={Global.colors.sidebaritem} href={href} style={styles.style}>{this.props.lable}</Button>
+                <Button color={Global.colors.sidebaritem} href={href} style={styles.style.o}>{this.props.lable}</Button>
             </li>
         );
     }

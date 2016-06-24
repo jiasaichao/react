@@ -8084,16 +8084,21 @@
 	        _super.call(this, props);
 	        // static defaultProps = { maxId: 0 }
 	        this.maxId = 0;
-	        this.state = { active: 0 };
+	        //this.state = { active: 0 };
 	    }
 	    Sidebar.prototype.render = function () {
+	        var _this = this;
 	        var self = this;
-	        var active = this.props.active || this.props.items[0].id;
-	        var s = this.props.items.map(function (value, index) {
-	            var si = value['items'].map(function (items, itemsIndex) {
-	                return React.createElement(SidebarItem, {lable: items.title, key: items.id, href: items.href});
+	        //let active=this.props.active||this.props.items[0].id;
+	        var s = this.props.parent.map(function (value, index) {
+	            var active = false;
+	            var si = _.filter(_this.props.child, { pid: value.id }).map(function (items, itemsIndex) {
+	                if (items.id === _this.props.active) {
+	                    active = true;
+	                }
+	                return React.createElement(SidebarItem, {lable: items.title, active: items.id === _this.props.active, key: items.id, href: items.href});
 	            });
-	            return React.createElement(SidebarItems, {lable: value.title, key: value.id, open: value.id === active, active: value.id === active}, si);
+	            return React.createElement(SidebarItems, {lable: value.title, active: active, open: value.open, key: value.id, handleOnClick: function () { return _this.props.open(value.id); }}, si);
 	        });
 	        // var children = this.props.children;
 	        // let childrenElements = React.Children.map(children, function (el: React.ReactElement<IPSidebarItems>, index) {
@@ -8113,7 +8118,10 @@
 	        _super.call(this, props);
 	        /**高度*/
 	        this.height = -1;
-	        this.state = { open: this.props.open || false };
+	        this.state = {
+	            open: this.props.open || false,
+	            active: this.props.active || false
+	        };
 	    }
 	    SidebarItems.prototype.render = function () {
 	        var styles = {
@@ -8124,7 +8132,7 @@
 	            }),
 	            showButton: common_1.Common.prepareStyles({ height: 41, paddingLeft: common_1.Global.padding, justifyContent: "space-between" })
 	        };
-	        if (this.props.active) {
+	        if (this.state.active) {
 	        }
 	        else {
 	            if (this.state.open) {
@@ -8160,14 +8168,11 @@
 	        if (childrenElements) {
 	            i = React.createElement("ul", {style: styles.children.o, ref: "aaaac"}, childrenElements);
 	        }
-	        return React.createElement("li", {style: { borderBottom: "1px solid #3D4957" }}, React.createElement(button_1.Button, {onClick: this.handleOnClick.bind(this), state: this.props.active ? 2 : 1, color: common_1.Global.colors.sidebar, style: styles.showButton.o}, this.props.lable, React.createElement("span", {style: { fontSize: "14px", color: "#fff", marginRight: 20 }, className: chevronName})), i);
+	        return React.createElement("li", {style: { borderBottom: "1px solid #3D4957" }}, React.createElement(button_1.Button, {onClick: this.props.handleOnClick.bind(this), state: this.state.active ? 2 : 1, color: common_1.Global.colors.sidebar, style: styles.showButton.o}, this.props.lable, React.createElement("span", {style: { fontSize: "14px", color: "#fff", marginRight: 20 }, className: chevronName})), i);
 	    };
 	    SidebarItems.prototype.componentDidMount = function () {
 	        this.height = this.refs["aaaac"].clientHeight;
 	        this.setState({ open: this.state.open });
-	    };
-	    SidebarItems.prototype.handleOnClick = function () {
-	        this.setState({ open: !this.state.open });
 	    };
 	    return SidebarItems;
 	}(React.Component));
@@ -8177,7 +8182,14 @@
 	        _super.apply(this, arguments);
 	    }
 	    SidebarItem.prototype.render = function () {
-	        return React.createElement("li", null, React.createElement(button_1.Button, {color: common_1.Global.colors.sidebaritem, href: this.props.href, style: { height: 31, paddingLeft: 43 }}, this.props.lable));
+	        var href = this.props.href || 'javascript:;';
+	        var styles = {
+	            style: common_1.Common.prepareStyles({ height: 31, paddingLeft: 43 })
+	        };
+	        if (this.props.active) {
+	            styles.style.merge(common_1.Global.colors.sidebaritem.Active);
+	        }
+	        return (React.createElement("li", null, React.createElement(button_1.Button, {color: common_1.Global.colors.sidebaritem, href: href, style: styles.style.o}, this.props.lable)));
 	    };
 	    return SidebarItem;
 	}(React.Component));
@@ -8357,6 +8369,14 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
+	var __assign = (this && this.__assign) || Object.assign || function(t) {
+	    for (var s, i = 1, n = arguments.length; i < n; i++) {
+	        s = arguments[i];
+	        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+	            t[p] = s[p];
+	    }
+	    return t;
+	};
 	/// <reference path="../../typings/browser.d.ts" />
 	var common_1 = __webpack_require__(95);
 	var index_1 = __webpack_require__(93);
@@ -8367,15 +8387,22 @@
 	        _super.apply(this, arguments);
 	    }
 	    MainLayout.prototype.render = function () {
-	        return (React.createElement("div", {style: { display: 'flex', flexDirection: 'column', minHeight: '100%' }}, React.createElement(index_1.Header, null, React.createElement(index_1.Button, {color: common_1.Global.colors.header, style: { height: "100%", padding: "0 8px" }}, "退出")), React.createElement("div", {style: { display: "flex", flex: '1' }}, React.createElement("div", {style: { width: "235px", display: 'flex', flexDirection: 'column' }}, React.createElement(index_1.Sidebar, {items: this.props.sidebar})), React.createElement("div", {style: { flex: "1" }}, React.createElement("header", {style: common_1.Global.styles.create(common_1.Global.styles.czjz).o}, React.createElement(index_1.NavigationBar, null, React.createElement(index_1.NavigationBarItem, {lable: "首页"}))), this.props.children))));
+	        return (React.createElement("div", {style: { display: 'flex', flexDirection: 'column', minHeight: '100%' }}, React.createElement(index_1.Header, null, React.createElement(index_1.Button, {color: common_1.Global.colors.header, style: { height: "100%", padding: "0 8px" }}, "退出")), React.createElement("div", {style: { display: "flex", flex: '1' }}, React.createElement("div", {style: { width: "235px", display: 'flex', flexDirection: 'column' }}, React.createElement(index_1.Sidebar, __assign({}, this.props.sidebar, {open: this.props.open}))), React.createElement("div", {style: { flex: "1" }}, React.createElement("header", {style: common_1.Global.styles.create(common_1.Global.styles.czjz).o}, React.createElement(index_1.NavigationBar, null, React.createElement(index_1.NavigationBarItem, {lable: "首页"}))), this.props.children))));
 	    };
 	    return MainLayout;
 	}(React.Component));
 	var mapStateToProps = function (state) {
-	    return state;
+	    return {
+	        sidebar: state.sidebar
+	    };
 	};
+	var mapDispatchToProps = function (dispatch) { return ({
+	    open: function (id) {
+	        dispatch({ type: 'sidebar-open', id: id });
+	    }
+	}); };
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = react_redux_1.connect(mapStateToProps)(MainLayout);
+	exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(MainLayout);
 
 
 /***/ },
@@ -8415,59 +8442,66 @@
 	"use strict";
 	/// <reference path="../typings/browser.d.ts" />
 	var redux_1 = __webpack_require__(11);
+	var defaultState = {
+	    sidebar: {
+	        active: 1,
+	        parent: [
+	            {
+	                id: 1, title: '用户界面功能', open: true
+	            },
+	            {
+	                id: 2, title: '首页2'
+	            },
+	            {
+	                id: 3, title: '首页3'
+	            }
+	        ],
+	        child: [
+	            {
+	                id: 1, pid: 1, title: '按钮', href: ''
+	            },
+	            {
+	                id: 2, pid: 1, title: '一般', href: '#/index/general'
+	            },
+	            {
+	                id: 3, pid: 1, title: '表格', href: '#/index/table'
+	            },
+	            {
+	                id: 4, pid: 2, title: '一般', href: '#/index/general'
+	            },
+	            {
+	                id: 5, pid: 2, title: '表格', href: '#/index/table'
+	            },
+	            {
+	                id: 6, pid: 2, title: '一般', href: '#/index/general'
+	            },
+	            {
+	                id: 7, pid: 3, title: '表格', href: '#/index/table'
+	            },
+	            {
+	                id: 8, pid: 3, title: '一般', href: '#/index/general'
+	            },
+	            {
+	                id: 9, pid: 3, title: '表格', href: '#/index/table'
+	            }
+	        ]
+	    }
+	};
 	var store = redux_1.createStore(function (state, action) {
 	    switch (action.type) {
-	        case 'INCR':
-	            return { counter: state.counter + action.by };
+	        case 'sidebar-open':
+	            var r = _.cloneDeep(state);
+	            //console.log("state:"+(state.sidebar.parent as any[]).filter(x=>x.id==action.id)[0].open);
+	            //console.log("r:"+(r.sidebar.parent as any[]).filter(x=>x.id==action.id)[0].open);
+	            var prant = r.sidebar.parent.filter(function (x) { return x.id == action.id; })[0];
+	            prant.open = !prant.open;
+	            console.log("stateed:" + state.sidebar.parent.filter(function (x) { return x.id == action.id; })[0].open);
+	            console.log("red:" + r.sidebar.parent.filter(function (x) { return x.id == action.id; })[0].open);
+	            return r;
 	        default:
 	            return state;
 	    }
-	}, {
-	    sidebar: [
-	        {
-	            id: 1, title: '用户界面功能',
-	            items: [
-	                {
-	                    id: 11, title: '按钮', href: ''
-	                },
-	                {
-	                    id: 12, title: '一般', href: '#/index/general'
-	                },
-	                {
-	                    id: 13, title: '表格', href: '#/index/table'
-	                }
-	            ]
-	        },
-	        {
-	            id: 2, title: '首页2',
-	            items: [
-	                {
-	                    id: 21, title: '按钮', href: ''
-	                },
-	                {
-	                    id: 22, title: '一般', href: ''
-	                },
-	                {
-	                    id: 23, title: '表格', href: ''
-	                }
-	            ]
-	        },
-	        {
-	            id: 3, title: '首页3',
-	            items: [
-	                {
-	                    id: 31, title: '按钮', href: ''
-	                },
-	                {
-	                    id: 32, title: '一般', href: ''
-	                },
-	                {
-	                    id: 33, title: '表格', href: ''
-	                }
-	            ]
-	        }
-	    ]
-	});
+	}, defaultState);
 	exports.store = store;
 
 

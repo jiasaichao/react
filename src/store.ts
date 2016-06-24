@@ -49,9 +49,13 @@ let store = createStore(
     (state, action) => {
         switch (action.type) {
             case 'sidebar-open':
-                let r=_.assign({},state);
+                let r=_.cloneDeep(state);
+                //console.log("state:"+(state.sidebar.parent as any[]).filter(x=>x.id==action.id)[0].open);
+                //console.log("r:"+(r.sidebar.parent as any[]).filter(x=>x.id==action.id)[0].open);
                 let prant=(r.sidebar.parent as any[]).filter(x=>x.id==action.id)[0];
-                prant.open==!prant.open;
+                prant.open=!prant.open;
+                console.log("stateed:"+(state.sidebar.parent as any[]).filter(x=>x.id==action.id)[0].open);
+                console.log("red:"+(r.sidebar.parent as any[]).filter(x=>x.id==action.id)[0].open);
                 return r;
             default:
                 return state;
