@@ -29,6 +29,7 @@ class Sidebar extends React.Component<IPSidebar, ISSidebar>{
                 }
                 return <SidebarItem lable={items.title} active={items.id===this.props.active}  key={items.id} href={items.href}></SidebarItem>;
             });
+            //console.log(value.open);
             return <SidebarItems lable={value.title} active={active} open={value.open} key={value.id} handleOnClick={()=>this.props.open(value.id)}>{si}</SidebarItems>
         });
         // var children = this.props.children;
@@ -56,22 +57,20 @@ interface IPSidebarItems extends React.Props<SidebarItems> {
     handleOnClick:()=>void;
 }
 interface ISSidebarItems {
-    /**是否展开*/
-    open?: boolean;
     /**是否是选中项，默认false */
     active?:boolean;
 }
 class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
-    /**高度*/
+    /**高度，默认值为-1，-1说明高度还没有计算出来。*/
     height = -1;
     constructor(props) {
         super(props);
         this.state = { 
-            open: this.props.open||false,
             active:this.props.active||false
              };
     }
     render() {
+        let open= this.props.open||false;
         let styles = {
             children: Common.prepareStyles({
                 transition: "height .3s",
@@ -83,7 +82,7 @@ class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
         if (this.state.active) {
         }
         else{
-            if (this.state.open) {
+            if (open) {
             styles.showButton.merge({
                 background:Colors.bgSidebarMouse,
                 color:Colors.fontSidebarMouse
@@ -100,7 +99,7 @@ class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
                     </SidebarItem>;
             }
         });
-        if (this.state.open) {
+        if (open) {
             if (this.height !== -1) {
                 styles.children.merge({ height: this.height });
             }
@@ -108,6 +107,8 @@ class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
             chevronName = "icon-chevron-down";
         }
         else {
+            
+        console.log(this.height);
             if (this.height !== -1) {
                 styles.children.merge({ height: 0 });
             }
@@ -128,7 +129,8 @@ class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
     }
     componentDidMount() {
         this.height = (this.refs["aaaac"] as Element).clientHeight;
-        this.setState({ open: this.state.open });
+        //重新渲染，因为计算高度需要在元素渲染后才能计算出来。
+        this.forceUpdate();
     }
     // handleOnClick() {
     //     this.setState({ open: !this.state.open });
