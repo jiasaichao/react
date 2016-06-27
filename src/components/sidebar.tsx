@@ -6,6 +6,7 @@ interface IPSidebar extends React.Props<Sidebar> {
     parent?:any[];
     child?:any[];
     open:(id)=>void;
+    handleOnClick:(id,href:string)=>void;
 }
 interface ISSidebar {
     /**选中项key*/
@@ -27,7 +28,8 @@ class Sidebar extends React.Component<IPSidebar, ISSidebar>{
                 if (items.id===this.props.active) {
                     active=true;
                 }
-                return <SidebarItem lable={items.title} active={items.id===this.props.active}  key={items.id} href={items.href}></SidebarItem>;
+                //console.log(items.id+':'+this.props.active+':'+(items.id===this.props.active));
+                return <SidebarItem lable={items.title} active={items.id===this.props.active}  key={items.id}  handleOnClick={()=>this.props.handleOnClick(value.id,value.href)}></SidebarItem>;
             });
             //console.log(value.open);
             return <SidebarItems lable={value.title} active={active} open={value.open} key={value.id} handleOnClick={()=>this.props.open(value.id)}>{si}</SidebarItems>
@@ -91,14 +93,6 @@ class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
         }
         let chevronName: string;
         let self = this;
-        let children = this.props.children;
-
-        let childrenElements = React.Children.map(children, function (el: React.ReactElement<ISidebarItem>, index) {
-            if ((el.type as any).name === "SidebarItem") {
-                return <SidebarItem lable={el.props.lable} key={el.key } href={el.props.href}>
-                    </SidebarItem>;
-            }
-        });
         if (open) {
             if (this.height !== -1) {
                 styles.children.merge({ height: this.height });
@@ -116,9 +110,7 @@ class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
         }
         /**子元素*/
         let i: JSX.Element;
-        if (childrenElements) {
-            i = <ul style={styles.children.o} ref="aaaac">{childrenElements}</ul>;
-        }
+        i = <ul style={styles.children.o} ref="aaaac">{this.props.children}</ul>;
         return <li style={{ borderBottom:"1px solid #3D4957" }}>
                     <Button onClick={this.props.handleOnClick.bind(this)} state={this.state.active?2:1} color={Global.colors.sidebar} style={styles.showButton.o}>
                     {this.props.lable}
@@ -142,21 +134,23 @@ class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
 
 interface ISidebarItem extends React.Props<SidebarItem> {
     lable: string;
-    href?: string;
-    active?:boolean;
+    handleOnClick:()=>void;
+    active:boolean; 
 }
 class SidebarItem extends React.Component<ISidebarItem, {}>{
     render() {
-        let href=this.props.href||'javascript:;';
+        //let href=this.props.href||'javascript:;';
         let styles = {
             style:Common.prepareStyles({ height: 31, paddingLeft: 43 })
         }
+        console.log('选中项'+this.props.active);
         if (this.props.active) {
+            console.log('选中项'+this.props.key);
             styles.style.merge(Global.colors.sidebaritem.Active);
         }
         return (
             <li>
-                <Button color={Global.colors.sidebaritem} href={href} style={styles.style.o}>{this.props.lable}</Button>
+                <Button color={Global.colors.sidebaritem} onClick={this.props.handleOnClick} style={styles.style.o}>{this.props.lable}</Button>
             </li>
         );
     }

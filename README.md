@@ -31,4 +31,19 @@
 `// 或者引用具体方法 (很适合在 browserify/webpack 中做最小化打包) var chunk = require('lodash/array/chunk');`   
 常用  
 `_.assign({ 'a': 1 }, { 'b': 2 }, { 'c': 3 });// → { 'a': 1, 'b': 2, 'c': 3 }`    
-`_.map([1, 2, 3], function(n) { return n * 3; });// → [3, 6, 9]`
+`_.map([1, 2, 3], function(n) { return n * 3; });// → [3, 6, 9]`    
+## 路由react-router及react-router-redux
+资料[react-ruter-redux](https://github.com/reactjs/react-router-redux)看说明
+### 通过事件跳转路由
+    import { routerMiddleware, push } from 'react-router-redux'
+
+    // 适用于store的中间件
+    const middleware = routerMiddleware(browserHistory)
+    const store = createStore(
+    reducers,
+    applyMiddleware(middleware)
+    )
+
+    // 任何地方都能调用
+    store.dispatch(push('/foo'))
+### 历史记录及其他看说明

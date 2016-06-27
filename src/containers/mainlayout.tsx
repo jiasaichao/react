@@ -9,7 +9,7 @@ interface IMainLayout extends React.Props<MainLayout> {
         child?:any[];
     };
 }
-class MainLayout extends React.Component<IMainLayout & { open: (id: any) => void; }, any>{
+class MainLayout extends React.Component<IMainLayout & { open: (id: any) => void;active: (id: any,href:string) => void; }, any>{
     render() {
         return (
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
@@ -18,7 +18,7 @@ class MainLayout extends React.Component<IMainLayout & { open: (id: any) => void
                     </Header>
                 <div style= {{ display: "flex", flex: '1' }} >
                     <div style= {{ width: "235px", display: 'flex', flexDirection: 'column' }}>
-                        <Sidebar {...this.props.sidebar} open={this.props.open}>
+                        <Sidebar {...this.props.sidebar} open={this.props.open} handleOnClick={this.props.active}>
                             </Sidebar>
                         </div>
                     <div style={{ flex: "1" }}>
@@ -40,6 +40,10 @@ const mapStateToProps = (state):IMainLayout => {
     };
 }
 const mapDispatchToProps = (dispatch) => ({
+    active: (id,href) => {
+        dispatch({ type: 'sidebar-active',id });
+        dispatch({type:'url',url:href});
+    },
     open: (id) => {
         dispatch({ type: 'sidebar-open',id });
     }

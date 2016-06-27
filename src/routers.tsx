@@ -14,7 +14,7 @@ import TableView from "./containers/tableview";
 //const store = BaseStore();
 //const history = syncHistoryWithStore(hashHistory, store);
 import {store} from './store';
-store.subscribe(()=>{console.log('改变了')})
+//store.subscribe(()=>{console.log('改变了')})
 let appRootComponent = (
     <Provider store = {store}>
          <Router>
