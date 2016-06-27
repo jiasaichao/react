@@ -42,6 +42,7 @@ const mapStateToProps = (state):IMainLayout => {
 const mapDispatchToProps = (dispatch) => ({
     active: (id,href) => {
         dispatch({ type: 'sidebar-active',id });
+        console.log("点击了子元素"+href);
         dispatch({type:'url',url:href});
     },
     open: (id) => {

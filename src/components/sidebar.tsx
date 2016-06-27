@@ -29,7 +29,7 @@ class Sidebar extends React.Component<IPSidebar, ISSidebar>{
                     active=true;
                 }
                 //console.log(items.id+':'+this.props.active+':'+(items.id===this.props.active));
-                return <SidebarItem lable={items.title} active={items.id===this.props.active}  key={items.id}  handleOnClick={()=>this.props.handleOnClick(value.id,value.href)}></SidebarItem>;
+                return <SidebarItem lable={items.title} active={items.id===this.props.active}  key={items.id}  handleOnClick={()=>{this.props.handleOnClick(value.id,items.href)}}></SidebarItem>;
             });
             //console.log(value.open);
             return <SidebarItems lable={value.title} active={active} open={value.open} key={value.id} handleOnClick={()=>this.props.open(value.id)}>{si}</SidebarItems>
@@ -102,7 +102,7 @@ class SidebarItems extends React.Component<IPSidebarItems, ISSidebarItems>{
         }
         else {
             
-        console.log(this.height);
+        //console.log(this.height);
             if (this.height !== -1) {
                 styles.children.merge({ height: 0 });
             }
@@ -143,9 +143,9 @@ class SidebarItem extends React.Component<ISidebarItem, {}>{
         let styles = {
             style:Common.prepareStyles({ height: 31, paddingLeft: 43 })
         }
-        console.log('选中项'+this.props.active);
+        //console.log('选中项'+this.props.active);
         if (this.props.active) {
-            console.log('选中项'+this.props.key);
+            //console.log('选中项'+this.props.key);
             styles.style.merge(Global.colors.sidebaritem.Active);
         }
         return (

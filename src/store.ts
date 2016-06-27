@@ -21,28 +21,28 @@ var defaultState = {
                 id: 1, pid: 1, title: '按钮', href: ''
             },
             {
-                id: 2, pid: 1, title: '一般', href: '#/index/general'
+                id: 2, pid: 1, title: '一般', href: '/index/general'
             },
             {
-                id: 3, pid: 1, title: '表格', href: '#/index/table'
+                id: 3, pid: 1, title: '表格', href: '/index/table'
             },
             {
-                id: 4, pid: 2, title: '一般', href: '#/index/general'
+                id: 4, pid: 2, title: '一般', href: '/index/general'
             },
             {
-                id: 5, pid: 2, title: '表格', href: '#/index/table'
+                id: 5, pid: 2, title: '表格', href: '/index/table'
             },
             {
-                id: 6, pid: 2, title: '一般', href: '#/index/general'
+                id: 6, pid: 2, title: '一般', href: '/index/general'
             },
             {
-                id: 7, pid: 3, title: '表格', href: '#/index/table'
+                id: 7, pid: 3, title: '表格', href: '/index/table'
             },
             {
-                id: 8, pid: 3, title: '一般', href: '#/index/general'
+                id: 8, pid: 3, title: '一般', href: '/index/general'
             },
             {
-                id: 9, pid: 3, title: '表格', href: '#/index/table'
+                id: 9, pid: 3, title: '表格', href: '/index/table'
             }
         ]
     }
@@ -67,7 +67,7 @@ let store = createStore(
                 r2.sidebar.active=action.id;
                 return r2;
             case 'url':
-            console.log('页面跳转');
+            console.log('页面跳转：'+action.url);
                 store.dispatch(push(action.url))
                 return state;
             default:
