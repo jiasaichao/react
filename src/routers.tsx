@@ -1,7 +1,7 @@
 ﻿/// <reference path="../typings/browser.d.ts" />
 import { Provider } from 'react-redux';
 import { IndexRoute, Router, Route, hashHistory, browserHistory } from 'react-router';
-//import { syncHistoryWithStore, routerReducer} from 'react-router-redux'
+import { syncHistoryWithStore, routerReducer} from 'react-router-redux'
 import App from "./app";
 import Button from "./containers/button";
 import Login from "./containers/login";
@@ -12,12 +12,12 @@ import TableView from "./containers/tableview";
 //import {BaseStore} from './redux/store/BaseStore';
 //import URL_CONFIG from './routersConfig';
 //const store = BaseStore();
-//const history = syncHistoryWithStore(hashHistory, store);
 import {store} from './store';
+const history = syncHistoryWithStore(hashHistory, store);
 //store.subscribe(()=>{console.log('改变了')})
 let appRootComponent = (
     <Provider store = {store}>
-         <Router>
+         <Router history={history}>
         <Route path="/" component={App}>
             <IndexRoute component={Login} />
             <Route path="/index" component={MainLayout}>

@@ -2,6 +2,7 @@
 import {Common, Global} from "../utils/common";
 import {Header, Button, Sidebar, NavigationBar, NavigationBarItem} from "../components/index";
 import { Provider, connect} from 'react-redux';
+import { routerMiddleware, push } from 'react-router-redux'
 interface IMainLayout extends React.Props<MainLayout> {
     sidebar: {
         active?:number;
@@ -43,7 +44,7 @@ const mapDispatchToProps = (dispatch) => ({
     active: (id,href) => {
         dispatch({ type: 'sidebar-active',id });
         console.log("点击了子元素"+href);
-        dispatch({type:'url',url:href});
+        dispatch(push(href))
     },
     open: (id) => {
         dispatch({ type: 'sidebar-open',id });
