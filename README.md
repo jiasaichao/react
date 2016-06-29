@@ -15,13 +15,33 @@
 * typings：typescript的d.ts文件不是使用的typings命令添加的直接复制过来的，用命令的时候老出问题，应该是我家里的网络不好。
 * .gitignore：git忽略文件。
 * tsconfig.json：编译typescript的配置文件。
-* webpack.config.js：webpack配置文件。
+* webpack.config.js：webpack配置文件。    
 
+## 架构概要（主要围绕Redux）
+### 要点
+应用中所有的 state 都以一个对象树的形式储存在一个单一的 store 中。    
+惟一改变 state 的办法是触发 action，一个描述发生什么的对象。   
+为了描述 action 如何改变 state 树，你需要编写 reducers。    
+### 三大原则
+* 单一数据源：整个应用的 state 被储存在一棵 object tree 中，它只有一个单一的 store 。
+* State 是只读的：惟一改变 state 的办法就是触发 action，action 是一个描述要发生什么的对象。
+* 纯函数的形式来执行修改：为了描述 action 如何改变 state tree ，你需要编写 reducers。  
+Reducer 只是一些纯函数，它接收之前的 state 和 action，并返回新的 state。刚开始你可以只有一个 reducer，随着应用变大，你可以把它拆成多个小的 reducers，分别独立地操作 state tree 的不同部分，因为 reducer 只是普通函数，你可以控制它们被调用的顺序，传入附加数据，甚至编写可复用的 reducer 来做一些通用任务，如分页器。
+
+## Store
+* 维持应用的 state。
+* 提供 getState() 方法获取 state。
+* 提供 dispatch(action) 方法更新 state。
+* 通过 subscribe(listener) 注册监听器。 
+
+## 拆分 Reducer
+Redux 提供了 combineReducers() 工具类
+每个 reducer 只负责管理全局 state 中它负责的一部分。每个 reducer 的 state 参数都不同，分别对应它管理的那部分 state 数据。
 ## 状态维护
 ### 组件自己维护状态：
-一些组件之间不交互，或者很少交互。如果其他组件要改变组件自己维护的状态而不是redux维护的可以通过事件总线的形式交互。
+一些组件之间不交互,比如按钮的移上去变色。如果其他组件要改变组件自己维护的状态而不是redux维护的可以通过事件总线的形式交互。
 ### redux维护状态，也就是redux提倡的无状态组件：
-一般，内容数据，其他组件经常修改的状态。
+内容数据，其他组件经常修改的状态。除了组件自己内部维护的状态。
 ## 插件/库
 ### lodash
 资料：[中文api文档](http://lodash.think2011.net/)  
@@ -47,3 +67,8 @@
     // 任何地方都能调用
     store.dispatch(push('/foo'))
 ### 历史记录及其他看说明
+## 参考网站
+[Redux 官方文档中文翻译](https://leecade.gitbooks.io/redux-in-chinese/content/)     
+[React Router 中文文档](http://react-guide.github.io/react-router-cn/index.html)    
+[使用Typescript编写Redux+Reactjs应用程序](https://github.com/xuanye/typescript-redux-sample)    
+[React with TypeScript](http://blog.csdn.net/kinfey/article/details/50387534)   

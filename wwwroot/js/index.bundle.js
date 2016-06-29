@@ -8380,7 +8380,8 @@
 	var common_1 = __webpack_require__(95);
 	var index_1 = __webpack_require__(93);
 	var react_redux_1 = __webpack_require__(2);
-	var react_router_redux_1 = __webpack_require__(108);
+	//import { routerMiddleware, push } from 'react-router-redux'
+	var react_router_1 = __webpack_require__(30);
 	var MainLayout = (function (_super) {
 	    __extends(MainLayout, _super);
 	    function MainLayout() {
@@ -8400,9 +8401,11 @@
 	    active: function (id, href) {
 	        dispatch({ type: 'sidebar-active', id: id });
 	        console.log("点击了子元素" + href);
-	        dispatch(react_router_redux_1.push(href));
+	        react_router_1.hashHistory.push(href);
+	        //dispatch(push(href))
 	    },
 	    open: function (id) {
+	        console.log("点击open" + id);
 	        dispatch({ type: 'sidebar-open', id: id });
 	    }
 	}); };
@@ -8911,28 +8914,28 @@
 	            id: 1, pid: 1, title: '按钮', href: ''
 	        },
 	        {
-	            id: 2, pid: 1, title: '一般', href: '#/index/general'
+	            id: 2, pid: 1, title: '一般', href: '/index/general'
 	        },
 	        {
-	            id: 3, pid: 1, title: '表格', href: '#/index/table'
+	            id: 3, pid: 1, title: '表格', href: '/index/table'
 	        },
 	        {
-	            id: 4, pid: 2, title: '一般', href: '#/index/general'
+	            id: 4, pid: 2, title: '一般', href: '/index/general'
 	        },
 	        {
-	            id: 5, pid: 2, title: '表格', href: '#/index/table'
+	            id: 5, pid: 2, title: '表格', href: '/index/table'
 	        },
 	        {
-	            id: 6, pid: 2, title: '一般', href: '#/index/general'
+	            id: 6, pid: 2, title: '一般', href: '/index/general'
 	        },
 	        {
-	            id: 7, pid: 3, title: '表格', href: '#/index/table'
+	            id: 7, pid: 3, title: '表格', href: '/index/table'
 	        },
 	        {
-	            id: 8, pid: 3, title: '一般', href: '#/index/general'
+	            id: 8, pid: 3, title: '一般', href: '/index/general'
 	        },
 	        {
-	            id: 9, pid: 3, title: '表格', href: '#/index/table'
+	            id: 9, pid: 3, title: '表格', href: '/index/table'
 	        }
 	    ]
 	};
@@ -8943,7 +8946,7 @@
 	            var r = _.cloneDeep(state);
 	            //console.log("state:"+(state.sidebar.parent as any[]).filter(x=>x.id==action.id)[0].open);
 	            //console.log("r:"+(r.sidebar.parent as any[]).filter(x=>x.id==action.id)[0].open);
-	            var prant = state.parent.filter(function (x) { return x.id == action.id; })[0];
+	            var prant = r.parent.filter(function (x) { return x.id == action.id; })[0];
 	            prant.open = !prant.open;
 	            //console.log("stateed:" + (state.sidebar.parent as any[]).filter(x => x.id == action.id)[0].open);
 	            //console.log("red:" + (r.sidebar.parent as any[]).filter(x => x.id == action.id)[0].open);
