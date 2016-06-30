@@ -29,7 +29,7 @@ class Sidebar extends React.Component<IPSidebar, ISSidebar>{
                     active=true;
                 }
                 //console.log(items.id+':'+this.props.active+':'+(items.id===this.props.active));
-                return <SidebarItem lable={items.title} active={items.id===this.props.active}  key={items.id}  handleOnClick={()=>{this.props.handleOnClick(value.id,items.href)}}></SidebarItem>;
+                return <SidebarItem lable={items.title} active={items.id===this.props.active}  key={items.id}  handleOnClick={()=>{this.props.handleOnClick(items.id,items.href)}}></SidebarItem>;
             });
             //console.log(value.open);
             return <SidebarItems lable={value.title} active={active} open={value.open} key={value.id} handleOnClick={()=>this.props.open(value.id)}>{si}</SidebarItems>
@@ -41,11 +41,11 @@ class Sidebar extends React.Component<IPSidebar, ISSidebar>{
         //         return i;
         //     }
         // });
-        return <div style={{ height: "100%",flex:'1', background: Global.colors.bgSidebar, fontSize:'14px' }}>
+        return (<div style={{ height: "100%",flex:'1', background: Global.colors.bgSidebar, fontSize:'14px' }}>
                 <ul>
                     {s}
                 </ul>
-            </div>;
+            </div>);
     }
 }
 

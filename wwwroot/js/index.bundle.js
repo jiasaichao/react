@@ -66,21 +66,19 @@
 	/// <reference path="../typings/browser.d.ts" />
 	var react_redux_1 = __webpack_require__(2);
 	var react_router_1 = __webpack_require__(30);
-	var react_router_redux_1 = __webpack_require__(108);
+	//import { syncHistoryWithStore, routerReducer} from 'react-router-redux'
 	var app_1 = __webpack_require__(91);
 	var button_1 = __webpack_require__(92);
 	var login_1 = __webpack_require__(103);
 	var mainlayout_1 = __webpack_require__(104);
 	var general_1 = __webpack_require__(105);
 	var tableview_1 = __webpack_require__(106);
-	//import Modeules from './controller/index';
-	//import {BaseStore} from './redux/store/BaseStore';
+	var notFound_1 = __webpack_require__(116);
 	//import URL_CONFIG from './routersConfig';
-	//const store = BaseStore();
 	var store_1 = __webpack_require__(107);
-	var history = react_router_redux_1.syncHistoryWithStore(react_router_1.hashHistory, store_1.store);
+	//const history = syncHistoryWithStore(hashHistory, store);
 	//store.subscribe(()=>{console.log('改变了')})
-	var appRootComponent = (React.createElement(react_redux_1.Provider, {store: store_1.store}, React.createElement(react_router_1.Router, {history: history}, React.createElement(react_router_1.Route, {path: "/", component: app_1.default}, React.createElement(react_router_1.IndexRoute, {component: login_1.default}), React.createElement(react_router_1.Route, {path: "/index", component: mainlayout_1.default}, React.createElement(react_router_1.IndexRoute, {component: button_1.default}), React.createElement(react_router_1.Route, {path: 'general', component: general_1.default}), React.createElement(react_router_1.Route, {path: 'table', component: tableview_1.default}))))));
+	var appRootComponent = (React.createElement(react_redux_1.Provider, {store: store_1.store}, React.createElement(react_router_1.Router, {history: react_router_1.hashHistory}, React.createElement(react_router_1.Route, {path: "/", component: app_1.default}, React.createElement(react_router_1.IndexRoute, {component: login_1.default}), React.createElement(react_router_1.Route, {path: "/index", component: mainlayout_1.default}, React.createElement(react_router_1.IndexRoute, {component: button_1.default}), React.createElement(react_router_1.Route, {path: 'general', component: general_1.default}), React.createElement(react_router_1.Route, {path: 'table', component: tableview_1.default}))), React.createElement(react_router_1.Route, {path: "*", component: notFound_1.default}))));
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = appRootComponent;
 
@@ -8098,7 +8096,7 @@
 	                    active = true;
 	                }
 	                //console.log(items.id+':'+this.props.active+':'+(items.id===this.props.active));
-	                return React.createElement(SidebarItem, {lable: items.title, active: items.id === _this.props.active, key: items.id, handleOnClick: function () { _this.props.handleOnClick(value.id, items.href); }});
+	                return React.createElement(SidebarItem, {lable: items.title, active: items.id === _this.props.active, key: items.id, handleOnClick: function () { _this.props.handleOnClick(items.id, items.href); }});
 	            });
 	            //console.log(value.open);
 	            return React.createElement(SidebarItems, {lable: value.title, active: active, open: value.open, key: value.id, handleOnClick: function () { return _this.props.open(value.id); }}, si);
@@ -8110,7 +8108,7 @@
 	        //         return i;
 	        //     }
 	        // });
-	        return React.createElement("div", {style: { height: "100%", flex: '1', background: common_1.Global.colors.bgSidebar, fontSize: '14px' }}, React.createElement("ul", null, s));
+	        return (React.createElement("div", {style: { height: "100%", flex: '1', background: common_1.Global.colors.bgSidebar, fontSize: '14px' }}, React.createElement("ul", null, s)));
 	    };
 	    return Sidebar;
 	}(React.Component));
@@ -8953,7 +8951,8 @@
 	            return r;
 	        case 'sidebar-active':
 	            var r2 = _.cloneDeep(state);
-	            state.active = action.id;
+	            r2.active = action.id;
+	            console.log(r2);
 	            return r2;
 	        case 'url':
 	            console.log('页面跳转：' + action.url);
@@ -8995,6 +8994,41 @@
 	thunk.withExtraArgument = createThunkMiddleware;
 	
 	exports['default'] = thunk;
+
+/***/ },
+/* 116 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	/// <reference path="../../typings/browser.d.ts" />
+	var common_1 = __webpack_require__(95);
+	var react_redux_1 = __webpack_require__(2);
+	var SL = common_1.Global.styles;
+	var CL = common_1.Global.colors;
+	/**404页面 */
+	var NotFound = (function (_super) {
+	    __extends(NotFound, _super);
+	    function NotFound() {
+	        _super.apply(this, arguments);
+	    }
+	    NotFound.prototype.render = function () {
+	        return (React.createElement("div", null, "404"));
+	    };
+	    return NotFound;
+	}(React.Component));
+	var mapStateToProps = function (state) {
+	    return {
+	        state: state
+	    };
+	};
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = react_redux_1.connect(mapStateToProps)(NotFound);
+
 
 /***/ }
 /******/ ]);

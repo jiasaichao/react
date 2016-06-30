@@ -70,5 +70,8 @@ Redux 提供了 combineReducers() 工具类
 ## 参考网站
 [Redux 官方文档中文翻译](https://leecade.gitbooks.io/redux-in-chinese/content/)     
 [React Router 中文文档](http://react-guide.github.io/react-router-cn/index.html)    
+[阮一峰React Router 使用教程](http://www.ruanyifeng.com/blog/2016/05/react_router.html)    
+[谈谈 react-router](http://qiutc.me/post/%E8%B0%88%E8%B0%88-react-router.html)    
+[react-router api文档](https://github.com/reactjs/react-router/blob/master/docs/API.md)
 [使用Typescript编写Redux+Reactjs应用程序](https://github.com/xuanye/typescript-redux-sample)    
 [React with TypeScript](http://blog.csdn.net/kinfey/article/details/50387534)   
