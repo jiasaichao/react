@@ -10,9 +10,12 @@ interface IMainLayout extends React.Props<MainLayout> {
         parent?:any[];
         child?:any[];
     };
+    location?:any;
 }
 class MainLayout extends React.Component<IMainLayout & { open: (id: any) => void;active: (id: any,href:string) => void; }, any>{
     render() {
+        //this.props.l
+        //console.log(this);
         return (
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
                 <Header>
@@ -20,7 +23,7 @@ class MainLayout extends React.Component<IMainLayout & { open: (id: any) => void
                     </Header>
                 <div style= {{ display: "flex", flex: '1' }} >
                     <div style= {{ width: "235px", display: 'flex', flexDirection: 'column' }}>
-                        <Sidebar {...this.props.sidebar} open={this.props.open} handleOnClick={this.props.active}>
+                        <Sidebar {...this.props.sidebar} open={this.props.open} currentPath={this.props.location.pathname} handleOnClick={this.props.active}>
                             </Sidebar>
                         </div>
                     <div style={{ flex: "1" }}>
@@ -45,6 +48,8 @@ const mapDispatchToProps = (dispatch) => ({
     active: (id,href) => {
         dispatch({ type: 'sidebar-active',id });
         console.log("点击了子元素"+href);
+        
+        //dispatch({ type: 'router-open',path:href });
         hashHistory.push(href);
         //dispatch(push(href))
     },

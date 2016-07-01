@@ -66,7 +66,6 @@
 	/// <reference path="../typings/browser.d.ts" />
 	var react_redux_1 = __webpack_require__(2);
 	var react_router_1 = __webpack_require__(30);
-	//import { syncHistoryWithStore, routerReducer} from 'react-router-redux'
 	var app_1 = __webpack_require__(91);
 	var button_1 = __webpack_require__(92);
 	var login_1 = __webpack_require__(103);
@@ -74,7 +73,10 @@
 	var general_1 = __webpack_require__(105);
 	var tableview_1 = __webpack_require__(106);
 	var notFound_1 = __webpack_require__(116);
+	//import Modeules from './controller/index';
+	//import {BaseStore} from './redux/store/BaseStore';
 	//import URL_CONFIG from './routersConfig';
+	//const store = BaseStore();
 	var store_1 = __webpack_require__(107);
 	//const history = syncHistoryWithStore(hashHistory, store);
 	//store.subscribe(()=>{console.log('改变了')})
@@ -8096,7 +8098,7 @@
 	                    active = true;
 	                }
 	                //console.log(items.id+':'+this.props.active+':'+(items.id===this.props.active));
-	                return React.createElement(SidebarItem, {lable: items.title, active: items.id === _this.props.active, key: items.id, handleOnClick: function () { _this.props.handleOnClick(items.id, items.href); }});
+	                return React.createElement(SidebarItem, {lable: items.title, active: items.href === _this.props.currentPath, key: items.id, handleOnClick: function () { _this.props.handleOnClick(items.id, items.href); }});
 	            });
 	            //console.log(value.open);
 	            return React.createElement(SidebarItems, {lable: value.title, active: active, open: value.open, key: value.id, handleOnClick: function () { return _this.props.open(value.id); }}, si);
@@ -8386,7 +8388,9 @@
 	        _super.apply(this, arguments);
 	    }
 	    MainLayout.prototype.render = function () {
-	        return (React.createElement("div", {style: { display: 'flex', flexDirection: 'column', minHeight: '100%' }}, React.createElement(index_1.Header, null, React.createElement(index_1.Button, {color: common_1.Global.colors.header, style: { height: "100%", padding: "0 8px" }}, "退出")), React.createElement("div", {style: { display: "flex", flex: '1' }}, React.createElement("div", {style: { width: "235px", display: 'flex', flexDirection: 'column' }}, React.createElement(index_1.Sidebar, __assign({}, this.props.sidebar, {open: this.props.open, handleOnClick: this.props.active}))), React.createElement("div", {style: { flex: "1" }}, React.createElement("header", {style: common_1.Global.styles.create(common_1.Global.styles.czjz).o}, React.createElement(index_1.NavigationBar, null, React.createElement(index_1.NavigationBarItem, {lable: "首页"}))), this.props.children))));
+	        //this.props.l
+	        //console.log(this);
+	        return (React.createElement("div", {style: { display: 'flex', flexDirection: 'column', minHeight: '100%' }}, React.createElement(index_1.Header, null, React.createElement(index_1.Button, {color: common_1.Global.colors.header, style: { height: "100%", padding: "0 8px" }}, "退出")), React.createElement("div", {style: { display: "flex", flex: '1' }}, React.createElement("div", {style: { width: "235px", display: 'flex', flexDirection: 'column' }}, React.createElement(index_1.Sidebar, __assign({}, this.props.sidebar, {open: this.props.open, currentPath: this.props.location.pathname, handleOnClick: this.props.active}))), React.createElement("div", {style: { flex: "1" }}, React.createElement("header", {style: common_1.Global.styles.create(common_1.Global.styles.czjz).o}, React.createElement(index_1.NavigationBar, null, React.createElement(index_1.NavigationBarItem, {lable: "首页"}))), this.props.children))));
 	    };
 	    return MainLayout;
 	}(React.Component));
@@ -8399,6 +8403,7 @@
 	    active: function (id, href) {
 	        dispatch({ type: 'sidebar-active', id: id });
 	        console.log("点击了子元素" + href);
+	        //dispatch({ type: 'router-open',path:href });
 	        react_router_1.hashHistory.push(href);
 	        //dispatch(push(href))
 	    },
@@ -8499,7 +8504,12 @@
 	var middleware = react_router_redux_1.routerMiddleware(react_router_1.browserHistory);
 	//监听全局数据
 	var index_1 = __webpack_require__(113);
-	var store = redux_1.createStore(index_1.default, redux_1.applyMiddleware(redux_thunk_1.default, middleware));
+	var store = redux_1.createStore(function (state, action) {
+	    /*没有直接放indexReducer是因为这里可以增加其他需要执行的函数，增加扩展性 */
+	    var nextState = index_1.default(state, action);
+	    /*这里可以再次处理nextState*/
+	    return nextState;
+	}, redux_1.applyMiddleware(redux_thunk_1.default, middleware));
 	exports.store = store;
 
 
@@ -8876,11 +8886,13 @@
 	 */
 	var react_router_redux_1 = __webpack_require__(108);
 	var sidebarReducer_1 = __webpack_require__(114);
+	var routerReducer_1 = __webpack_require__(117);
 	/**
 	 * 合并reducers
 	 */
 	var index = redux_1.combineReducers({
 	    sidebar: sidebarReducer_1.default,
+	    router: routerReducer_1.default,
 	    routing: react_router_redux_1.routerReducer
 	});
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -9028,6 +9040,34 @@
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = react_redux_1.connect(mapStateToProps)(NotFound);
+
+
+/***/ },
+/* 117 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	/// <reference path="../../typings/browser.d.ts" />
+	var react_router_1 = __webpack_require__(30);
+	var AppState = {
+	    path: '/'
+	};
+	function AppReducer(state, action) {
+	    if (state === void 0) { state = AppState; }
+	    switch (action.type) {
+	        case 'router-open':
+	            if (state.path != action.path) {
+	                react_router_1.hashHistory.push(action.path);
+	                return Object.assign({}, state, { path: action.path });
+	            }
+	            return state;
+	        default:
+	            return state;
+	    }
+	    ;
+	}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = AppReducer;
 
 
 /***/ }

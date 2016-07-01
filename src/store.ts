@@ -52,6 +52,11 @@ const middleware = routerMiddleware(browserHistory)
 //监听全局数据
 import indexReducer from './reducers/index';
 let store = createStore(
-    indexReducer,
+    (state, action) => {
+        /*没有直接放indexReducer是因为这里可以增加其他需要执行的函数，增加扩展性 */
+        let nextState=indexReducer(state,action);
+        /*这里可以再次处理nextState*/
+       return nextState;
+    },
     applyMiddleware(thunkMiddleware,middleware));
 export {store}

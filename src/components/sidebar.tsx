@@ -7,6 +7,7 @@ interface IPSidebar extends React.Props<Sidebar> {
     child?:any[];
     open:(id)=>void;
     handleOnClick:(id,href:string)=>void;
+    currentPath:string;
 }
 interface ISSidebar {
     /**选中项key*/
@@ -29,7 +30,7 @@ class Sidebar extends React.Component<IPSidebar, ISSidebar>{
                     active=true;
                 }
                 //console.log(items.id+':'+this.props.active+':'+(items.id===this.props.active));
-                return <SidebarItem lable={items.title} active={items.id===this.props.active}  key={items.id}  handleOnClick={()=>{this.props.handleOnClick(items.id,items.href)}}></SidebarItem>;
+                return <SidebarItem lable={items.title} active={items.href===this.props.currentPath}  key={items.id}  handleOnClick={()=>{this.props.handleOnClick(items.id,items.href)}}></SidebarItem>;
             });
             //console.log(value.open);
             return <SidebarItems lable={value.title} active={active} open={value.open} key={value.id} handleOnClick={()=>this.props.open(value.id)}>{si}</SidebarItems>

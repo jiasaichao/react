@@ -4,12 +4,13 @@ import {combineReducers} from 'redux';
  */
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import sidebar from './sidebarReducer';
-
+import router from './routerReducer';
 /**
  * 合并reducers
  */
 const index = combineReducers({
   sidebar,
+  router,
   routing: routerReducer
 })
 

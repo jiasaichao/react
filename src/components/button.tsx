@@ -24,7 +24,7 @@ interface IButtonProps extends React.Props<Button> {
     style?: CSSProperties;
     onClick?: () => void;
     /**跳转链接地址，如果有此项则onClick则不会生效，如果做跳转有做其他事情则都写在onClick里*/
-    href?: string
+    href?: string;
 }
 /**
  * 基本按钮

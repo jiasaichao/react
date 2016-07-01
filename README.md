@@ -53,6 +53,8 @@ Redux 提供了 combineReducers() 工具类
 `_.assign({ 'a': 1 }, { 'b': 2 }, { 'c': 3 });// → { 'a': 1, 'b': 2, 'c': 3 }`    
 `_.map([1, 2, 3], function(n) { return n * 3; });// → [3, 6, 9]`    
 ## 路由react-router及react-router-redux
+引入react-router后Route中component组件props中加入，location:key,pathname(路径)等、routeParams、params等。     
+和路由相关的状态不要放到store里,直接从智能组件的props中读取  
 资料[react-ruter-redux](https://github.com/reactjs/react-router-redux)看说明
 ### 通过事件跳转路由
     import { routerMiddleware, push } from 'react-router-redux'
